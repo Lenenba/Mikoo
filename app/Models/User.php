@@ -64,6 +64,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the profile associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(BabysitterProfile::class, 'user_id')
+            ->with(['photos', 'certifications']);
+    }
+
+    /**
      * Scope a query to only include users with the 'Babysitter' role.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -103,15 +114,37 @@ class User extends Authenticatable
             fn($query, $name) => $query->where('name', 'like', '%' . $name . '%')
         );
     }
+
     /**
-     * Scope a query to filter products based on given criteria.
+     * Check if the user has a specific role.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $filters
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param string $role
+     * @return bool
      */
-    public function Profile()
+    public function isSuperAdmin(): bool
     {
-        return $this->hasOne(BabysitterProfile::class);
+        return $this->hasRole('SuperAdmin');
+    }
+
+    /**
+     * Check if the user has a specific role.
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function isBabysitter(): bool
+    {
+        return $this->hasRole('Babysitter');
+    }
+
+    /**
+     * Check if the user has a specific role.
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function isParent(): bool
+    {
+        return $this->hasRole('Parent');
     }
 }

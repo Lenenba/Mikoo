@@ -24,4 +24,14 @@ class BabysitterProfilePhoto extends Model
     {
         return $this->belongsTo(BabysitterProfile::class, 'babysitter_profile_id');
     }
+
+    /**
+     * Get the URL of the photo.
+     *
+     * @return string
+     */
+    public function scopeIsProfilePicture($query)
+    {
+        return $query->where('is_profile_picture', true);
+    }
 }

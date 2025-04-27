@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\PasswordController;
+use App\Http\Controllers\BabysitterProfilePhotoController;
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');
@@ -18,6 +19,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('settings/availabilities', [AvailabilityController::class, 'create'])->name('availabilities.create');
     Route::post('settings/availabilities/store', [AvailabilityController::class, 'store'])->name('availabilities.store');
+
+    Route::get('settings/photos', [BabysitterProfilePhotoController::class, 'create'])->name('photos.create');
+    Route::post('settings/photos/store', [BabysitterProfilePhotoController::class, 'store'])->name('photos.store');
 
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/Appearance');

@@ -55,7 +55,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'superadmin@example.com',
             'role_id' => $superAdminRole->id, // Assuming 1 is the ID for SuperAdmin role
         ]);
-
+        $adminProfil = BabysitterProfile::factory()->for($superadmin)->create();
+        BabysitterProfilePhoto::factory()
+            ->for($adminProfil)
+            ->create([
+                'is_profile_picture' => true,
+            ]);
         // Create 5 availabilities for superadmin as babysitter
         Availability::factory()
             ->count(5)

@@ -22,6 +22,10 @@ const sidebarNavItems: NavItem[] = [
         title: 'Availabilities',
         href: '/settings/availabilities',
     },
+    {
+        title: 'Photos',
+        href: '/settings/photos',
+    },
 ];
 
 const page = usePage();

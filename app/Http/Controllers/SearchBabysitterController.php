@@ -23,11 +23,10 @@ class SearchBabysitterController extends Controller
         ]);
         $babySitters = User::FindBabysitter()
             ->MostRecent()
-            ->with(['profile', 'profile.photos', 'profile.certifications'])
+            ->with(['profile'])
             ->Filter($filters)
             ->simplePaginate(10)
             ->withQueryString();
-
         return Inertia::render('search/Index', [
             'babySitters' => $babySitters,
             'filters' => $filters,
