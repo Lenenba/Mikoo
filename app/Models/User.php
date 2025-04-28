@@ -48,6 +48,11 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * get availibilities associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function availabilities()
     {
         return $this->hasMany(Availability::class);
@@ -55,6 +60,16 @@ class User extends Authenticatable
 
     /**
      * Get the reservations made by this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    /**
+     * Get the role made by this user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

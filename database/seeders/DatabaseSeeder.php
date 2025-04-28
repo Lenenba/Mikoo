@@ -46,6 +46,11 @@ class DatabaseSeeder extends Seeder
                 ->count(10)
                 ->recycle($clients)
                 ->create();
+
+
+            foreach ($clients as $client) {
+                BabysitterProfile::factory()->for($client)->create();
+            }
         }
 
         $superAdminRole = Role::where('name', 'SuperAdmin')->firstOrFail();
@@ -72,22 +77,32 @@ class DatabaseSeeder extends Seeder
             ->get();
 
         $babysitters->each(function ($babysitter) {
-            $profile = BabysitterProfile::factory()->for($babysitter)->create();
-            // Create one profile photo (is_profile = true)
+            // Create two additional photos (is_profile_picture = false)
             BabysitterProfilePhoto::factory()
-                ->for($profile)
+                ->for($babysitter->profile)
                 ->create([
                     'is_profile_picture' => true,
                 ]);
-
             // Create two additional photos (is_profile_picture = false)
             BabysitterProfilePhoto::factory()
-                ->count(2)
-                ->for($profile)
+                ->count(5)
+                ->for($babysitter->profile)
                 ->create([
                     'is_profile_picture' => false,
                 ]);
-            BabysitterProfileCertification::factory()->count(2)->for($profile)->create();
+            BabysitterProfileCertification::factory()->count(2)->for($babysitter->profile)->create();
+
+            $parent = User::where('role_id', 4)->get();
+
+            $parent->each(function ($parent) use ($babysitter) {
+                // Create 5 reservations for each babysitter
+                Reservation::factory()
+                    ->count(2)
+                    ->create([
+                        'user_id' => $parent->id,
+                        'babysitter_id' => $babysitter->id,
+                    ]);
+            });
         });
     }
 }

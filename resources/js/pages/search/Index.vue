@@ -72,7 +72,7 @@ watch(() => filterForm.name, (newValue: string) => {
                             </div>
                         </div>
                         <h2 class="text-lg font-semibold">{{ babysitter.name }}</h2>
-                        <p class="text-gray-500 min-h-[8vh]">
+                        <p class="text-gray-500 min-h-[10vh]">
                             {{ babysitter.profile.bio.slice(0, 100) }}.
                         </p>
                         <Link :href="route('babysitter.show', babysitter)">
@@ -80,7 +80,9 @@ watch(() => filterForm.name, (newValue: string) => {
                             View Profile
                         </Button>
                         </Link>
-                        <Button>Book now</Button>
+                        <Link :href="route('reservations.create', { user: babysitter })">
+                        <Button class="w-full">Book me now</Button>
+                        </Link>
                     </div>
                 </div>
             </div>

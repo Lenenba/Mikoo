@@ -6,6 +6,7 @@ use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\BabysitterProfilePhotoController;
+use App\Http\Controllers\SetDefaultProfilePhotoController;
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');
@@ -22,6 +23,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('settings/photos', [BabysitterProfilePhotoController::class, 'create'])->name('photos.create');
     Route::post('settings/photos/store', [BabysitterProfilePhotoController::class, 'store'])->name('photos.store');
+
+    Route::put('/settings/photos/default/{photoId}', SetDefaultProfilePhotoController::class)
+        ->name('photos.setDefault');
 
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/Appearance');

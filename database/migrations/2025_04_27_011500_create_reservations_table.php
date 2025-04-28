@@ -28,17 +28,27 @@ return new class extends Migration
                 ->default('pending');
 
             $table->text('notes')->nullable();
+            $table->json('days_of_week')
+                ->nullable();
+
+            $table->date('start_time')
+                ->nullable();
+            $table->date('end_time')
+                ->nullable();
 
             // Recurrence fields
             $table->boolean('is_recurring')
                 ->default(false);
-            $table->string('recurrence_rule')
+            $table->enum('recurrence_freq', ['daily', 'weekly', 'monthly', 'yearly'])
+                ->nullable();
+            $table->integer('recurrence_interval')
                 ->nullable();
             $table->date('recurrence_start_date')
                 ->nullable();
             $table->date('recurrence_end_date')
                 ->nullable();
-
+            $table->string('recurrence_rule')
+                ->nullable();
             $table->timestamps();
         });
     }

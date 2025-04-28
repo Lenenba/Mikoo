@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $user,
-                'profilPicture' => $user?->profile->photos()->isProfilePicture()->first()->url ?? null,
+                'profilPicture' => $user?->profile?->photos()->isProfilePicture()->first()->url ?? null,
                 'role' => $user?->role->name,
             ],
             'ziggy' => [
