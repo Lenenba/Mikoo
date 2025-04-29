@@ -18,12 +18,26 @@ class ReservationPolicy
      */
     public function accept(User $user, Reservation $reservation): bool
     {
-        // Allow super-admins to accept any reservation
         if ($user->role->name === env('SUPER_ADMIN_ROLE')) {
             return true;
         }
 
-        // Only the assigned babysitter can accept their own reservations
+        return $user->id === $reservation->babysitter_id;
+    }
+
+    /**
+     * Determine whether the user can cancel the reservation.
+     *
+     * @param  \App\Models\User         $user
+     * @param  \App\Models\Reservation  $reservation
+     * @return bool
+     */
+    public function cancel(User $user, Reservation $reservation): bool
+    {
+        if ($user->role->name === env('SUPER_ADMIN_ROLE')) {
+            return true;
+        }
+
         return $user->id === $reservation->babysitter_id;
     }
 }

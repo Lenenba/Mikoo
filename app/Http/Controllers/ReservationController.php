@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Reservation\ReservationRequest;
-use App\Models\User;
-use App\Models\Reservation;
-use App\Services\ReservationDataService;
-use App\Services\ReservationToFullCalendarService;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Carbon\Carbon;
 use RRule\RRule;
+use Carbon\Carbon;
+use App\Models\User;
+use Inertia\Inertia;
+use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
+use App\Services\ReservationDataService;
+use App\Notifications\ReservationNotification;
+use App\Services\ReservationToFullCalendarService;
+use App\Http\Requests\Reservation\ReservationRequest;
 
 class ReservationController extends Controller
 {
@@ -109,10 +110,15 @@ class ReservationController extends Controller
         }
 
         // 5️⃣ Création de la réservation
-        Reservation::create(array_merge($data, [
+        $reservation = Reservation::create(array_merge($data, [
             'user_id'         => Auth::id(),
             'recurrence_rule' => $rruleString,
         ]));
+
+        // English comment: notify the parent via the Notification system
+        $reservation->user->notify(
+            new ReservationNotification($reservation)
+        );
 
         return redirect()
             ->route('reservations.index')

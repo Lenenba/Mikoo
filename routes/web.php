@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\SearchBabysitterController;
+use App\Http\Controllers\AcceptReservationController;
 use App\Http\Controllers\BabysitterProfileController;
+use App\Http\Controllers\CancelReservationController;
 use App\Http\Controllers\Dashboard\DashboardController;
 
 Route::get('/', function () {
@@ -33,6 +35,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('reservations.create');
     Route::post('/reservations/store', [ReservationController::class, 'store'])
         ->name('reservations.store');
+
+    Route::post('/reservations/{reservationId}/accept', AcceptReservationController::class)
+        ->name('reservations.accept');
+    Route::post('/reservations/{reservationId}/cancel', CancelReservationController::class)
+        ->name('reservations.cancel');
 });
 
 require __DIR__ . '/settings.php';

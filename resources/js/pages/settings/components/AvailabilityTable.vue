@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { usePage, Link, } from '@inertiajs/vue3';
 import { type SharedData } from '@/types';
 import { FilePenLine } from 'lucide-vue-next';
-import Delete from './Delete.vue';
+import Delete from '@/components/delete.vue';
 const page = usePage<SharedData>();
 const availabilities = computed(() => page.props.availabilities);
 

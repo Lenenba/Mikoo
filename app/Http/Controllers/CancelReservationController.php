@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
-
 use App\Notifications\ReservationNotification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class AcceptReservationController extends Controller
+class CancelReservationController extends Controller
 {
     use AuthorizesRequests;
+
     /**
-     * Accept a reservation.
+     * Cancel a reservation.
      *
      * @param  int  $reservationId
      * @return \Illuminate\Http\RedirectResponse
@@ -20,13 +20,14 @@ class AcceptReservationController extends Controller
     {
         $reservation = Reservation::findOrFail($reservationId);
 
-        if ($reservation->status !== 'pending') {
-            return redirect()->back()->with('error', 'Reservation is not in a pending state.');
+        if ($reservation->status === 'canceled') {
+            return redirect()->back()->with('error', 'This Reservation can not be cancelled.');
         }
-        // Authorize the action using the ReservationPolicy
-        $this->authorize('accept', $reservation);
 
-        $reservation->update(['status' => 'confirmed']);
+        // Authorize the action using the ReservationPolicycanceled
+        $this->authorize('cancel', $reservation);
+
+        $reservation->update(['status' => 'canceled']);
 
         // English comment: notify the parent via the Notification system
         $reservation->user->notify(
@@ -34,6 +35,6 @@ class AcceptReservationController extends Controller
         );
 
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Reservation Confirmed successfully!');
+        return redirect()->back()->with('success', 'Reservation canceled successfully!');
     }
 }

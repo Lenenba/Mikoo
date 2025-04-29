@@ -2,16 +2,26 @@
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-vue-next'
-
+import { router } from '@inertiajs/vue3'
 defineProps<{
     reservation: {
         id: string
     }
 }>()
 
-function copy(id: string) {
-    navigator.clipboard.writeText(id)
+/**
+ * Trigger a POST request via Inertia to accept the reservation.
+ * @param id Reservation ID
+ */
+function actionReservation(id: string, event: string) {
+    if (event === 'accept') {
+        router.post(`/reservations/${id}/accept`)
+    }
+    if (event === 'cancel') {
+        router.post(`/reservations/${id}/cancel`)
+    }
 }
+
 </script>
 
 <template>
@@ -24,8 +34,11 @@ function copy(id: string) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem @click="copy(reservation.id)">
-                Copy payment ID
+            <DropdownMenuItem @click="actionReservation(reservation.id, 'accept')">
+                Confirme reservation
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="actionReservation(reservation.id, 'cancel')">
+                Cancel reservation
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
