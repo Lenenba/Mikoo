@@ -95,12 +95,12 @@ class User extends Authenticatable
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder // Good practice to add return type hint
      */
-    public function scopeFindBabysitter(Builder $query): Builder // Original name
+    public function scopeFindRole(Builder $query, string $role): Builder // Original name
     {
         // This correctly filters users by checking the name
         // of their related Role model.
-        return $query->whereHas('role', function ($subQuery) { // Renamed inner var for clarity
-            $subQuery->where('name', 'Babysitter');
+        return $query->whereHas('role', function ($subQuery) use ($role) { // Renamed inner var for clarity
+            $subQuery->where('name', $role);
         });
     }
 
@@ -128,38 +128,5 @@ class User extends Authenticatable
             $filters['name'] ?? null,
             fn($query, $name) => $query->where('name', 'like', '%' . $name . '%')
         );
-    }
-
-    /**
-     * Check if the user has a specific role.
-     *
-     * @param string $role
-     * @return bool
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->hasRole('SuperAdmin');
-    }
-
-    /**
-     * Check if the user has a specific role.
-     *
-     * @param string $role
-     * @return bool
-     */
-    public function isBabysitter(): bool
-    {
-        return $this->hasRole('Babysitter');
-    }
-
-    /**
-     * Check if the user has a specific role.
-     *
-     * @param string $role
-     * @return bool
-     */
-    public function isParent(): bool
-    {
-        return $this->hasRole('Parent');
     }
 }

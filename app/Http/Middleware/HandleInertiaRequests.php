@@ -50,6 +50,10 @@ class HandleInertiaRequests extends Middleware
                 'profilPicture' => $user?->profile?->photos()->isProfilePicture()->first()->url ?? null,
                 'role' => $user?->role->name,
             ],
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error')
+            ],
             'ziggy' => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),

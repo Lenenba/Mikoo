@@ -21,7 +21,7 @@ class SearchBabysitterController extends Controller
         $filters = $request->only([
             'name',
         ]);
-        $babySitters = User::FindBabysitter()
+        $babySitters = User::FindRole(env('BABYSITTER_ROLE'))
             ->MostRecent()
             ->with(['profile'])
             ->Filter($filters)

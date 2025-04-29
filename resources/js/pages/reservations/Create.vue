@@ -50,7 +50,6 @@ const form = useForm({
 });
 
 const createReservation = () => {
-    console.log(form);
     form.post(route('reservations.store'), {
         onSuccess: () => {
             form.reset();

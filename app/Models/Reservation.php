@@ -90,4 +90,16 @@ class Reservation extends Model
     {
         return $query->where('is_recurring', false);
     }
+
+    /**
+     * Scope a query to only include reservations for a specific babysitter.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $babysitterId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsPending($query)
+    {
+        return $query->where('status', 'pending');
+    }
 }

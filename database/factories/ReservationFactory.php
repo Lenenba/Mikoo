@@ -17,7 +17,7 @@ class ReservationFactory extends Factory
     public function definition(): array
     {
         // Générer des dates réalistes
-        $startDate = Carbon::instance($this->faker->dateTimeBetween('now', '+1 month'));
+        $startDate = Carbon::instance($this->faker->dateTimeBetween('first day of January', 'last day of December'));
         $endDate = (clone $startDate)->addMonths(rand(1, 3));
 
         // Générer les jours de récurrence aléatoires

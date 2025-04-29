@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
             ->for($superadmin, 'user')
             ->create();
 
-        $babysitters = User::FindBabysitter()
+        $babysitters = User::FindRole(env('BABYSITTER_ROLE'))
             ->MostRecent()
             ->get();
 
