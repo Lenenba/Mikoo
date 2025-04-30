@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-vue-next'
 import { type SharedData } from '@/types';
-
+import { usePhotoUrl } from '@/composables/usePhotoUrl';
+const { getPhotoUrl } = usePhotoUrl();
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Search',
@@ -68,8 +69,8 @@ watch(() => filterForm.name, (newValue: string) => {
                     <div class="flex flex-col gap-2">
                         <div v-if="babysitter.profile.photos.length > 0">
                             <div v-for="avatar in babysitter.profile.photos" :key="avatar.id">
-                                <img v-if="avatar.is_profile_picture" :src="avatar.url" :alt="babysitter.name"
-                                    class="h-52 w-full object-cover rounded-lg" />
+                                <img v-if="avatar.is_profile_picture" :src="getPhotoUrl(avatar.url)"
+                                    :alt="babysitter.name" class="h-52 w-full object-cover rounded-lg" />
                             </div>
                         </div>
                         <h2 class="text-lg font-semibold">{{ babysitter.name }}</h2>
