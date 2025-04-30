@@ -39,6 +39,8 @@ class ProductionUsersSeeder extends Seeder
                 'bio' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
                 'address' => '123 Main St, City, Country',
                 'phone' => '123-456-7890',
+                'price_per_hour' => 20.00, // Default price
+                'experience' => '2 years of experience with children',
                 'birthdate' => now()->subYears(25)->format('Y-m-d'), // 25 years old
             ]);
 

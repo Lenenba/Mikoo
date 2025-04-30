@@ -59,9 +59,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                             <Link :href="route('reservations.create', { user: reservation.babysitter })">
                             <Button>Book me again</Button>
                             </Link>
-                            <Button variant="outline">
-                                {{ reservation.status }}
-                            </Button>
+
                         </div>
                     </div>
 
@@ -79,9 +77,23 @@ const breadcrumbs: BreadcrumbItem[] = [
                         </h3>
 
                         <div class="flex-1 bg-gray-50 dark:bg-gray-700 p-4 rounded">
-                            <h4 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-1">
-                                Reservation ID: {{ reservation.id }}
-                            </h4>
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                                    Reservation ID: {{ reservation.id }}
+                                </h4>
+                                <Badge :class="[
+                                    'text-white',
+                                    reservation.status === 'confirmed'
+                                        ? 'bg-green-300 dark:bg-green-700'
+                                        : reservation.status === 'canceled'
+                                            ? 'bg-red-300 dark:bg-red-700'
+                                            : reservation.status === 'pending'
+                                                ? 'bg-yellow-300 dark:bg-yellow-700'
+                                                : 'bg-gray-300 dark:bg-gray-600'
+                                ]">
+                                    {{ reservation.status }}
+                                </Badge>
+                            </div>
                             <p class="text-gray-600 dark:text-gray-400">Status: {{ reservation.status }}</p>
                             <p class="text-gray-600 dark:text-gray-400">Start Date: {{
                                 reservation.recurrence_start_date }}</p>

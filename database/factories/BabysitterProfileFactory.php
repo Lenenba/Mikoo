@@ -23,6 +23,8 @@ class BabysitterProfileFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
             'bio' => fake()->paragraph(),
+            'experience' => fake()->paragraph(),
+            'price_per_hour' => fake()->randomFloat(2, 5, 50), // Random price between 5 and 50
         ];
     }
 }

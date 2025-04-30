@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->text('bio')->nullable();
             $table->text('experience')->nullable();
+            $table->integer('price_per_hour')->default(0);
             $table->timestamps();
         });
 
