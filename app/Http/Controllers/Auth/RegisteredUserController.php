@@ -52,7 +52,9 @@ class RegisteredUserController extends Controller
         $user->role()->associate($role);
         $user->save();
 
-        $profile = $user->profile()->create();
+        $profile = $user->profile()->create([
+            'bio' => 'Default bio for ' . $user->name,
+        ]);
 
 
         $defaultUrl = asset('images/defaultProfil.png');

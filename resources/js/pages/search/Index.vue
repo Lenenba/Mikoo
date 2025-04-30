@@ -73,7 +73,7 @@ watch(() => filterForm.name, (newValue: string) => {
                         </div>
                         <h2 class="text-lg font-semibold">{{ babysitter.name }}</h2>
                         <p class="text-gray-500 min-h-[10vh]">
-                            {{ babysitter.profile.bio.slice(0, 100) }}.
+                            {{ babysitter.profile?.bio.slice(0, 100) ?? 'lorem ipsum' }}.
                         </p>
                         <Link :href="route('babysitter.show', babysitter)">
                         <Button variant="outline" class="w-full">
