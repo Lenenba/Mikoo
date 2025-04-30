@@ -36,6 +36,26 @@ export interface User {
     updated_at: string;
 }
 
+export interface Photo {
+    id: number;
+    babysitter_profile_id: User['id'];
+    url: string;
+}
+
+export interface Profile {
+    id: number;
+    first_name: string;
+    last_name: string;
+    phone: string;
+    address: string;
+    bio?: string;
+    birthdate: string;
+    experience: string;
+    certifications: string[]; // Assuming certifications are strings
+    user_id: User['id'];
+    photos: Photo[];
+}
+
 export interface Availability {
     id: number;
     user_id?: number;
