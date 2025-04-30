@@ -38,7 +38,7 @@ function submit() {
     <Head title="Profile Details Settings" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <SettingsLayout>
-            <div class="max-w-3xl mx-auto  dark:bg-gray-800 p-6 ">
+            <div class="max-w-3xl mx-auto p-6 ">
                 <HeadingSmall title="Profile Information" description="Update your personal details" />
                 <Form @submit.prevent="submit" class="mt-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
