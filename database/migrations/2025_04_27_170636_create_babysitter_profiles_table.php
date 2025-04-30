@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->default('User');
+            $table->string('last_name')->default('User');
             $table->date('birthdate')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
@@ -37,7 +37,7 @@ return new class extends Migration
         Schema::create('babysitter_profile_certifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('babysitter_profile_id')->constrained()->onDelete('cascade');
-            $table->string('title'); // Certification title
+            $table->string('title')->default('certification');
             $table->text('description')->nullable(); // Optional description
             $table->timestamps();
         });
