@@ -34,6 +34,6 @@ class AcceptReservationController extends Controller
         );
 
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Reservation Confirmed successfully!');
+        return redirect()->route('reservations.show', $reservation->id)->with('success', 'Reservation Confirmed successfully!');
     }
 }

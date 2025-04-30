@@ -40,6 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('reservations.accept');
     Route::post('/reservations/{reservationId}/cancel', CancelReservationController::class)
         ->name('reservations.cancel');
+    Route::get('/reservations/{reservationId}/show', [ReservationController::class, 'show'])
+        ->name('reservations.show');
 });
 
 require __DIR__ . '/settings.php';

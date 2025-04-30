@@ -40,4 +40,20 @@ class ReservationPolicy
 
         return $user->id === $reservation->babysitter_id;
     }
+
+    /**
+     * Determine whether the user can view the reservation.
+     *
+     * @param  \App\Models\User         $user
+     * @param  \App\Models\Reservation  $reservation
+     * @return bool
+     */
+    public function view(User $user, Reservation $reservation): bool
+    {
+        if ($user->role->name === env('SUPER_ADMIN_ROLE')) {
+            return true;
+        }
+
+        return $user->id === $reservation->babysitter_id || $user->id === $reservation->user_id;
+    }
 }

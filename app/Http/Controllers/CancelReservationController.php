@@ -35,6 +35,6 @@ class CancelReservationController extends Controller
         );
 
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Reservation canceled successfully!');
+        return redirect()->route('reservations.show', $reservation->id)->with('success', 'Reservation canceled successfully!');
     }
 }
