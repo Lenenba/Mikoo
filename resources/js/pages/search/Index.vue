@@ -23,6 +23,7 @@ const filterForm = useForm({
     name: page.props.filters.name ?? "",
 });
 
+const Bio = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
 
 // Fonction de filtrage avec un délai pour éviter des appels excessifs
 let filterTimeout: NodeJS.Timeout | null = null;
@@ -72,8 +73,11 @@ watch(() => filterForm.name, (newValue: string) => {
                             </div>
                         </div>
                         <h2 class="text-lg font-semibold">{{ babysitter.name }}</h2>
-                        <p class="text-gray-500 min-h-[10vh]">
-                            {{ babysitter.profile?.bio.slice(0, 100) ?? 'lorem ipsum' }}.
+                        <p class="text-gray-500 min-h-[10vh]" v-if="babysitter.profile?.bio">
+                            {{ babysitter.profile?.bio.slice(0, 100) }}
+                        </p>
+                        <p class="text-gray-500 min-h-[10vh]" v-else>
+                            {{ Bio.slice(0, 100) }}
                         </p>
                         <Link :href="route('babysitter.show', babysitter)">
                         <Button variant="outline" class="w-full">

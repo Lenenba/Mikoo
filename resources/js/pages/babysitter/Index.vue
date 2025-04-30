@@ -70,7 +70,7 @@ const babysitter = computed(() => page.props.babySitter[0]);
                     <!-- About Me -->
                     <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-sm ">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">About Me</h3>
-                        <p class="text-gray-600 dark:text-gray-400">{{ babysitter.profile.bio }}</p>
+                        <p class="text-gray-600 dark:text-gray-400">{{ babysitter.profile?.bio ?? 'lorem' }}</p>
                     </div>
 
                     <!-- Certifications -->
