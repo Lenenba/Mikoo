@@ -38,7 +38,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'roleName' => 'required|string|in:Parent,Babysitter',
         ]);
-        dd('here');
 
         //Retrieve the Role model based on the submitted name
         $role = Role::where('name', $request->roleName)->firstOrFail();

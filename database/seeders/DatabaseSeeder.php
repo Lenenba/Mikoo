@@ -37,13 +37,13 @@ class DatabaseSeeder extends Seeder
             }
 
             $clients = User::factory()
-                ->count(10)
+                ->count(3)
                 ->create([
                     'role_id' => $role->id,
                 ]);
             // Create 10 availabilities for clients
             Availability::factory()
-                ->count(10)
+                ->count(2)
                 ->recycle($clients)
                 ->create();
 
@@ -84,12 +84,12 @@ class DatabaseSeeder extends Seeder
                     'is_profile_picture' => true,
                 ]);
             // Create two additional photos (is_profile_picture = false)
-            BabysitterProfilePhoto::factory()
-                ->count(5)
-                ->for($babysitter->profile)
-                ->create([
-                    'is_profile_picture' => false,
-                ]);
+            // BabysitterProfilePhoto::factory()
+            //     ->count(5)
+            //     ->for($babysitter->profile)
+            //     ->create([
+            //         'is_profile_picture' => false,
+            //     ]);
             BabysitterProfileCertification::factory()->count(2)->for($babysitter->profile)->create();
 
             $parent = User::where('role_id', 4)->get();

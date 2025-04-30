@@ -21,7 +21,7 @@ class BabysitterProfilePhotoFactory extends Factory
     {
         return [
             'babysitter_profile_id' => BabysitterProfile::factory(),
-            'url'                   => $this->generateFakeCompanyLogo2(),
+            'url'                   => $this->generateFakeProfilePhoto(),
             'is_profile_picture'    => $this->faker->boolean(),
         ];
     }
