@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
             //     ->create([
             //         'is_profile_picture' => false,
             //     ]);
-            BabysitterProfileCertification::factory()->count(2)->for($babysitter->profile)->create();
+            // BabysitterProfileCertification::factory()->count(2)->for($babysitter->profile)->create();
 
             $parent = User::where('role_id', 4)->get();
 
