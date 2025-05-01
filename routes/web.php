@@ -9,6 +9,8 @@ use App\Http\Controllers\AcceptReservationController;
 use App\Http\Controllers\BabysitterProfileController;
 use App\Http\Controllers\CancelReservationController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\WorkController;
+use App\Models\Work;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -42,6 +44,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('reservations.cancel');
     Route::get('/reservations/{reservationId}/show', [ReservationController::class, 'show'])
         ->name('reservations.show');
+
+    Route::get('/works', [WorkController::class, 'index'])
+        ->name('works.index');
 });
 
 require __DIR__ . '/settings.php';

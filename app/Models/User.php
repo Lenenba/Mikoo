@@ -89,6 +89,21 @@ class User extends Authenticatable
             ->with(['photos', 'certifications']);
     }
 
+    public function isBabysitter(): bool
+    {
+        // Check if the user has the 'Babysitter' role
+        return $this->role->name === env('BABYSITTER_ROLE');
+    }
+    public function isParent(): bool
+    {
+        // Check if the user has the 'Parent' role
+        return $this->role->name === env('PARENT_ROLE');
+    }
+    public function isAdmin(): bool
+    {
+        // Check if the user has the 'Admin' role
+        return $this->role->name === env('SUPER_ADMIN_ROLE');
+    }
     /**
      * Scope a query to only include users with the 'Babysitter' role.
      *
@@ -103,6 +118,7 @@ class User extends Authenticatable
             $subQuery->where('name', $role);
         });
     }
+
 
     /**
      * Scope a query to order products by the most recent.

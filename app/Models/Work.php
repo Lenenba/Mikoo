@@ -30,8 +30,45 @@ class Work extends Model
         'invoiced_at' => 'datetime',
     ];
 
+    /**
+     * Get the reservation associated with the work.
+     */
     public function reservation()
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    /**
+     * scope for parent user.
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $userId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForParent($query, $userId)
+    {
+        return $query->whereHas('reservation', fn($q) => $q->where('user_id', $userId))
+            ->with(['reservation.babysitter.profile']);
+    }
+
+    /**
+     * scope for babysitter user.
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $userId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForBabysitter($query, $userId)
+    {
+        return $query->whereHas('reservation', fn($q) => $q->where('babysitter_id', $userId))
+            ->with(['reservation.user.profile']);
+    }
+
+    /**
+     * scope for admin user.
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithReservation($query)
+    {
+        return $query->with('reservation')->orderByDesc('scheduled_for');
     }
 }
