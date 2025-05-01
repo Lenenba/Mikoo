@@ -1,7 +1,7 @@
 <?php
 
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WorkController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\SearchBabysitterController;
@@ -9,12 +9,10 @@ use App\Http\Controllers\AcceptReservationController;
 use App\Http\Controllers\BabysitterProfileController;
 use App\Http\Controllers\CancelReservationController;
 use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\WorkController;
-use App\Models\Work;
+use App\Http\Controllers\WelcomeController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('home');
+Route::get('/', WelcomeController::class)
+    ->name('welcome');
 
 // Authenticated User Routes
 Route::middleware(['auth', 'verified'])->group(function () {
