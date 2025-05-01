@@ -150,6 +150,6 @@ class ReservationController extends Controller
 
         return Inertia::render('reservations/Show', [
             'reservation' => $reservation,
-        ]);
+        ])->with('success', 'Reservation store successfully!');
     }
 }

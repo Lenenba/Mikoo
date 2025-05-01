@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, usePage, useForm } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -10,6 +12,15 @@ import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/vue3';
 import type { Work } from '@/types/work';
 import { usePhotoUrl } from '@/composables/usePhotoUrl';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog'
 const { getPhotoUrl } = usePhotoUrl();
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -35,6 +46,17 @@ function selectWork(work: Work) {
 function formatDate(dateStr: string | undefined) {
     return dateStr ? format(new Date(dateStr), 'dd MMMM yyyy') : 'N/A';
 }
+
+const form = useForm({
+    start_time: '',
+    end_time: '',
+});
+const submit = () => {
+    form.put(route('works.update', selectedWork.value?.id), {
+        preserveScroll: true,
+    });
+    form.reset();
+};
 </script>
 
 <template>
@@ -54,7 +76,7 @@ function formatDate(dateStr: string | undefined) {
                                 <div class="text-sm font-semibold">{{ formatDate(work.scheduled_for) }}</div>
                                 <div class="flex flex-col mt-2">
                                     <p class="text-sm ">Heure : {{ work.start_time }} → {{ work.end_time
-                                    }}</p>
+                                        }}</p>
                                     <p class="text-sm">
                                         Total amount : {{ work.price }} $
                                     </p>
@@ -78,7 +100,7 @@ function formatDate(dateStr: string | undefined) {
                                     Réservation : {{ selectedWork.reservation?.notes || 'Aucune note' }}
                                 </p>
                                 <p class="text-sm mt-2">Heure : {{ selectedWork.start_time }} → {{ selectedWork.end_time
-                                }}</p>
+                                    }}</p>
                                 <p class="text-sm mt-2">Statut :
                                     <span class="font-medium">
                                         {{ selectedWork.is_completed ? 'Terminé' : 'En attente' }}
@@ -91,9 +113,45 @@ function formatDate(dateStr: string | undefined) {
                                 </p>
                             </div>
                             <div class="flex flex-col  items-center justify-between gap-2">
-                                <Link :href="route('reservations.index')" class="flex-1">
-                                <Button class="w-32 bg-green-500 dark:bg-green-300">Ajuster l'heure</Button>
-                                </Link>
+                                <Dialog>
+                                    <DialogTrigger as-child>
+                                        <Button class="w-32">Ajuster l'heure</Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>Mettre a jour le travail</DialogTitle>
+                                            <DialogDescription>
+                                                Mettre à jour le travail de {{ selectedWork.reservation?.babysitter.name
+                                                }}.
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <form @submit.prevent="submit" class="space-y-6">
+                                            <div class="grid gap-4 py-4">
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <Label for="start_time"
+                                                            class="block text-sm font-medium text-gray-700">Heure
+                                                            de début</Label>
+                                                        <Input type="time" id="start_time" name="start_time"
+                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                                            v-model="form.start_time" />
+                                                    </div>
+                                                    <div>
+                                                        <Label for="end_time"
+                                                            class="block text-sm font-medium text-gray-700">Heure
+                                                            de fin</Label>
+                                                        <Input type="time" id="end_time" name="end_time"
+                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                                            v-model="form.end_time" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <Button type="submit" class="w-32">Save changes</Button>
+                                            </DialogFooter>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
                                 <Link :href="route('reservations.index')" class="flex-1">
                                 <Button variant="default" class="w-32">Valider</Button>
                                 </Link>
@@ -174,7 +232,7 @@ function formatDate(dateStr: string | undefined) {
                                             selectedWork.reservation.babysitter.profile.birthdate }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Phone: {{
                                             selectedWork.reservation.babysitter.profile.phone
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Experience: {{
                                             selectedWork.reservation.babysitter.profile.experience }}</p>
                                     </div>
@@ -232,7 +290,7 @@ function formatDate(dateStr: string | undefined) {
                                             selectedWork.reservation.user?.profile.birthdate }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Phone: {{
                                             selectedWork.reservation.user?.profile.phone
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Experience: {{
                                             selectedWork.reservation.user?.profile.experience }}</p>
                                     </div>

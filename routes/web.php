@@ -45,6 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/works', [WorkController::class, 'index'])
         ->name('works.index');
+    Route::put('/works/{workId}/update', [WorkController::class, 'update'])
+        ->name('works.update');
 });
 
 require __DIR__ . '/settings.php';

@@ -43,4 +43,29 @@ class WorkController extends Controller
             'works' => $query->get(),
         ]);
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $workId
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $workId)
+    {
+        $work = Work::findOrFail($workId);
+
+        // if (
+        //     $work->reservation->babysitter_id !== Auth::user()->id
+        //     || $work->reservation->user_id !== Auth::user()->id
+        // ) {
+        //     return response()->json(['message' => 'Unauthorized'], 403);
+        // }
+
+
+        // Update the work with the new data
+        $work->update($request->all());
+
+        return back()->with('success', 'Work updated successfully!');
+    }
 }
