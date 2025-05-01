@@ -69,9 +69,8 @@ trait ReservationTrait
         string $freq,
         int $interval,
         string $startDate,
-        string $startTime,
         string $endDate,
-        string $endTime
+        array $daysOfWeek = []
     ): string {
         // Format DTSTART
         $dtStart = Carbon::parse("$startDate")

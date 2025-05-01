@@ -32,6 +32,8 @@ return new class extends Migration
                 ->nullable();
             $table->time('end_time')
                 ->nullable();
+            $table->json('days_of_week')
+                ->nullable();
 
             // Recurrence fields
             $table->boolean('is_recurring')

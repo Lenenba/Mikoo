@@ -84,9 +84,9 @@ class ReservationController extends Controller
             $data['recurrence_interval'] ?? 1,
             $data['recurrence_start_date'],
             $data['recurrence_end_date'],
-            $data['start_time'] ?? '00:00',
-            $data['end_time'] ?? '23:59',
+            $data['days_of_week'] ?? []
         );
+
 
         // 2️⃣ Instancier l'objet RRule pour la nouvelle réservation
         $newRule = new RRule($rruleString);

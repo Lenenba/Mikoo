@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use RRule\RRule;
 use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
@@ -11,9 +12,12 @@ use App\Models\WorkSession;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\Utils\Traits\ReservationTrait;
 
 class ProductionUsersSeeder extends Seeder
 {
+    use ReservationTrait;
+
     public function run(): void
     {
         // Create or retrieve roles
@@ -63,7 +67,16 @@ class ProductionUsersSeeder extends Seeder
 
         foreach ($babysitters as $babysitter) {
             $startDate = Carbon::now()->addDays(1)->startOfDay();
-            $endDate = Carbon::now()->addDays(21)->startOfDay();
+            $endDate = Carbon::now()->addDays(30)->startOfDay();
+
+            $rruleString = $this->buildRRule(
+                'weekly',
+                5,
+                $startDate->toDateString(),
+                $endDate->toDateString(),
+                ['MO', 'FR'],
+            );
+
 
             $reservation = Reservation::create([
                 'user_id' => $parent1->id,
@@ -75,7 +88,7 @@ class ProductionUsersSeeder extends Seeder
                 'recurrence_freq' => 'weekly',
                 'recurrence_start_date' => $startDate->toDateString(),
                 'recurrence_end_date' => $endDate->toDateString(),
-                'recurrence_rule' => 'FREQ=WEEKLY;BYDAY=MO,WE,FR',
+                'recurrence_rule' => $rruleString,
                 'notes' => 'Auto-generated reservation with recurrence',
             ]);
 

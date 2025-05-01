@@ -29,6 +29,7 @@ class ReservationRequest extends \Illuminate\Foundation\Http\FormRequest
             'end_time' => 'required|date_format:H:i|after:start_time',
             'babysitter_id' => 'required|exists:users,id',
             'recurrence_interval' => 'nullable|integer|min:1',
+            'days_of_week' => 'nullable|array',
             'notes' => 'nullable|string',
             'recurrence_freq' => 'required|in:daily,weekly,monthly',
             'is_recurring' => 'boolean',

@@ -29,13 +29,15 @@ class WorkSessionGeneratorService
         $endTime       = Carbon::parse($reservation->end_time);
         $durationHours = $startTime->diffInHours($endTime);
         foreach ($dates as $date) {
-            Work::Create([
+            $work  = Work::Create([
                 'reservation_id' => $reservation->id,
                 'scheduled_for' => is_string($date) ? $date : $date->format('Y-m-d'),
                 'start_time' =>  $reservation->start_time,
                 'end_time' => $reservation->end_time,
-                'price' => $reservation->babysitter->price_per_hour * $durationHours,
             ]);
+
+            $work->price = $reservation->babysitter->profile->price_per_hour * $durationHours;
+            $work->save();
         }
     }
 }
