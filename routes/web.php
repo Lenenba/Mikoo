@@ -12,7 +12,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\WelcomeController;
 
 Route::get('/', WelcomeController::class)
-    ->name('welcome');
+    ->name('home');
 
 // Authenticated User Routes
 Route::middleware(['auth', 'verified'])->group(function () {
