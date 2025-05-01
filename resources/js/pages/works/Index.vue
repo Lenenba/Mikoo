@@ -53,7 +53,7 @@ function formatDate(dateStr: string | undefined) {
                             <div class="flex flex-row justify-between items-center">
                                 <div class="text-sm font-semibold">{{ formatDate(work.scheduled_for) }}</div>
                                 <p class="text-sm mt-2">Heure : {{ work.start_time }} → {{ work.end_time
-                                    }}</p>
+                                }}</p>
                             </div>
                             <div class="text-xs text-muted-foreground">{{ work.reservation?.notes }}</div>
                             <Separator class="my-2" />
@@ -72,7 +72,7 @@ function formatDate(dateStr: string | undefined) {
                                     Réservation : {{ selectedWork.reservation?.notes || 'Aucune note' }}
                                 </p>
                                 <p class="text-sm mt-2">Heure : {{ selectedWork.start_time }} → {{ selectedWork.end_time
-                                    }}</p>
+                                }}</p>
                                 <p class="text-sm mt-2">Statut :
                                     <span class="font-medium">
                                         {{ selectedWork.is_completed ? 'Terminé' : 'En attente' }}
@@ -165,7 +165,7 @@ function formatDate(dateStr: string | undefined) {
                                             selectedWork.reservation.babysitter.profile.birthdate }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Phone: {{
                                             selectedWork.reservation.babysitter.profile.phone
-                                            }}</p>
+                                        }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Experience: {{
                                             selectedWork.reservation.babysitter.profile.experience }}</p>
                                     </div>
@@ -174,7 +174,7 @@ function formatDate(dateStr: string | undefined) {
                         </div>
 
                         <!-- Fiche du Parent si pas de babysitter -->
-                        <div v-else>
+                        <div v-if="selectedWork.reservation?.user">
                             <Separator class="my-4" />
                             <div class="grid grid-cols-1 md:grid-cols-6 gap-4 w-full">
                                 <!-- Left column -->
@@ -223,7 +223,7 @@ function formatDate(dateStr: string | undefined) {
                                             selectedWork.reservation.user?.profile.birthdate }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Phone: {{
                                             selectedWork.reservation.user?.profile.phone
-                                            }}</p>
+                                        }}</p>
                                         <p class="text-gray-600 dark:text-gray-400">Experience: {{
                                             selectedWork.reservation.user?.profile.experience }}</p>
                                     </div>

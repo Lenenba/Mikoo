@@ -63,6 +63,16 @@ class Work extends Model
     }
 
     /**
+     * scope for super admin user.
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForSuperAdmin($query)
+    {
+        return $query->with(['reservation.user.profile', 'reservation.babysitter.profile']);
+    }
+
+    /**
      * scope for admin user.
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder

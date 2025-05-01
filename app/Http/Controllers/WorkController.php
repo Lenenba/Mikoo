@@ -31,7 +31,7 @@ class WorkController extends Controller
                 break;
 
             case env('SUPER_ADMIN_ROLE'):
-                // aucun filtre
+                $query->forSuperAdmin(); // scope: filtrer par babysitter_id
                 break;
 
             default:
