@@ -8,7 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { usePhotoUrl } from '@/composables/usePhotoUrl';
-
+import { Badge } from '@/components/ui/badge';
 const { getPhotoUrl } = usePhotoUrl();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -55,9 +55,15 @@ const babysitter = computed(() => page.props.babySitter[0]);
                     <!-- Header / Booking button -->
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                         <div>
-                            <h1 class="text-2xl md:text-4xl font-semibold text-gray-900 dark:text-gray-100">
-                                {{ babysitter.name }}
-                            </h1>
+                            <div class="flex flex-row items-baseline">
+                                <h1 class="text-2xl md:text-4xl font-semibold text-gray-900 dark:text-gray-100">
+                                    {{ babysitter.name }}
+                                </h1>
+                                <badge
+                                    class="text-lg md:text-xl ml-2 font-semibold bg-fuchsia-700 dark:bg-fuchsia-300 text-white">
+                                    {{
+                                        babysitter.profile.price_per_hour }} $</badge>
+                            </div>
                             <h2 class="text-sm md:text-lg text-gray-500 dark:text-gray-400">
                                 {{ babysitter.profile.address }}
                             </h2>

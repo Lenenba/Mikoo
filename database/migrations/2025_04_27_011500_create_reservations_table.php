@@ -28,12 +28,9 @@ return new class extends Migration
                 ->default('pending');
 
             $table->text('notes')->nullable();
-            $table->json('days_of_week')
+            $table->time('start_time')
                 ->nullable();
-
-            $table->date('start_time')
-                ->nullable();
-            $table->date('end_time')
+            $table->time('end_time')
                 ->nullable();
 
             // Recurrence fields

@@ -58,6 +58,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get the works associated with this reservation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function works()
+    {
+        return $this->hasMany(Work::class);
+    }
+
+    /**
      * Scope a query to only include recurring reservations.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

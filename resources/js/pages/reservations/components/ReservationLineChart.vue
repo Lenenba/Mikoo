@@ -22,8 +22,8 @@ const y = (d: any) => d.value
     <div class="p-4 max-h-full w-full">
         <!-- Header section -->
         <div class="flex flex-col space-y-1">
-            <span class="text-2xl font-bold text-gray-700">{{ title }}</span>
-            <span class="text-7xl font-bold text-green-800 dark:text-green-200">{{ total }}</span>
+            <span class="text-xl font-bold text-gray-700">{{ title }}</span>
+            <span class="text-5xl font-bold text-green-800 dark:text-green-200">{{ total }}</span>
             <span class="text-xs text-green-600">{{ variation }}</span>
         </div>
 

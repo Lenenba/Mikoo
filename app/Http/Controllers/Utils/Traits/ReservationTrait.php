@@ -71,15 +71,14 @@ trait ReservationTrait
         string $startDate,
         string $startTime,
         string $endDate,
-        string $endTime,
-        array $daysOfWeek
+        string $endTime
     ): string {
         // Format DTSTART
-        $dtStart = Carbon::parse("{$startDate} {$startTime}")
+        $dtStart = Carbon::parse("$startDate")
             ->utc()->format('Ymd');
 
         // Format UNTIL
-        $until = Carbon::parse("{$endDate} {$endTime}")
+        $until = Carbon::parse("$endDate")
             ->utc()->format('Ymd');
 
         $parts = [

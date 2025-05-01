@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-vue-next'
 import { type SharedData } from '@/types';
+import { Badge } from '@/components/ui/badge';
 import { usePhotoUrl } from '@/composables/usePhotoUrl';
 const { getPhotoUrl } = usePhotoUrl();
 const breadcrumbs: BreadcrumbItem[] = [
@@ -73,7 +74,11 @@ watch(() => filterForm.name, (newValue: string) => {
                                     :alt="babysitter.name" class="h-52 w-full object-cover rounded-lg" />
                             </div>
                         </div>
-                        <h2 class="text-lg font-semibold">{{ babysitter.name }}</h2>
+                        <div class="flex flex-row justify-between items-center">
+                            <h2 class="text-lg font-semibold">{{ babysitter.name }}</h2>
+                            <badge class="font-semibold bg-fuchsia-700 dark:bg-fuchsia-300 text-white">{{
+                                babysitter.profile.price_per_hour }} $</badge>
+                        </div>
                         <p class="text-gray-500 min-h-[10vh]" v-if="babysitter.profile?.bio">
                             {{ babysitter.profile?.bio.slice(0, 100) }}
                         </p>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 
+use App\Services\WorkSessionGeneratorService;
 use App\Notifications\ReservationNotification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -32,6 +33,8 @@ class AcceptReservationController extends Controller
         $reservation->user->notify(
             new ReservationNotification($reservation)
         );
+
+        app(WorkSessionGeneratorService::class)->generate($reservation);
 
         // Redirect back with a success message
         return redirect()->route('reservations.show', $reservation->id)->with('success', 'Reservation Confirmed successfully!');

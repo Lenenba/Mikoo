@@ -83,10 +83,9 @@ class ReservationController extends Controller
             $data['recurrence_freq'],
             $data['recurrence_interval'] ?? 1,
             $data['recurrence_start_date'],
-            $data['recurrence_start_time'] ?? '00:00',
             $data['recurrence_end_date'],
-            $data['recurrence_end_time'] ?? '23:59',
-            $data['days_of_week'] ?? []
+            $data['start_time'] ?? '00:00',
+            $data['end_time'] ?? '23:59',
         );
 
         // 2️⃣ Instancier l'objet RRule pour la nouvelle réservation
@@ -113,11 +112,16 @@ class ReservationController extends Controller
             }
         }
 
+
         // 5️⃣ Création de la réservation
         $reservation = Reservation::create(array_merge($data, [
             'user_id'         => Auth::id(),
             'recurrence_rule' => $rruleString,
         ]));
+
+        $reservation->start_time = Carbon::createFromFormat('H:i', $data['start_time']);
+        $reservation->end_time   = Carbon::createFromFormat('H:i', $data['end_time']);
+        $reservation->save();
 
         // English comment: notify the parent via the Notification system
         $reservation->user->notify(
