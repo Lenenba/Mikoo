@@ -19,19 +19,19 @@ class WorkController extends Controller
         $user = Auth::user();
         // Base query with eager-loaded reservation
 
-        $query = Work::withReservation(); // scope: eager-load + tri
+        $query = Work::withReservation();
 
         switch ($user->role->name) {
             case env('PARENT_ROLE'):
-                $query->forParent($user->id); // scope: filtrer par user_id
+                $query->forParent($user->id);
                 break;
 
             case env('BABYSITTER_ROLE'):
-                $query->forBabysitter($user->id); // scope: filtrer par babysitter_id
+                $query->forBabysitter($user->id);
                 break;
 
             case env('SUPER_ADMIN_ROLE'):
-                $query->forSuperAdmin(); // scope: filtrer par babysitter_id
+                $query->forSuperAdmin();
                 break;
 
             default:

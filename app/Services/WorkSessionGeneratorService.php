@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use RRule\RRule;
+use Carbon\Carbon;
 use App\Models\Work;
 use App\Models\Reservation;
 
@@ -22,12 +23,18 @@ class WorkSessionGeneratorService
             $dates[] = $reservation->recurrence_start_date;
         }
 
+
+        // 2. Calcule la durée de la session en heures
+        $startTime     = Carbon::parse($reservation->start_time);
+        $endTime       = Carbon::parse($reservation->end_time);
+        $durationHours = $startTime->diffInHours($endTime);
         foreach ($dates as $date) {
-            Work::firstOrCreate([
+            Work::Create([
                 'reservation_id' => $reservation->id,
                 'scheduled_for' => is_string($date) ? $date : $date->format('Y-m-d'),
                 'start_time' =>  $reservation->start_time,
                 'end_time' => $reservation->end_time,
+                'price' => $reservation->babysitter->price_per_hour * $durationHours,
             ]);
         }
     }

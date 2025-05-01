@@ -11,6 +11,15 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class AcceptReservationController extends Controller
 {
     use AuthorizesRequests;
+
+
+    protected WorkSessionGeneratorService $workGenerator;
+
+    public function __construct(WorkSessionGeneratorService $workGenerator)
+    {
+        $this->workGenerator = $workGenerator;
+    }
+
     /**
      * Accept a reservation.
      *
@@ -34,7 +43,8 @@ class AcceptReservationController extends Controller
             new ReservationNotification($reservation)
         );
 
-        app(WorkSessionGeneratorService::class)->generate($reservation);
+        // Générer les sessions de travail
+        $this->workGenerator->generate($reservation);
 
         // Redirect back with a success message
         return redirect()->route('reservations.show', $reservation->id)->with('success', 'Reservation Confirmed successfully!');

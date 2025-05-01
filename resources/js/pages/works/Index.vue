@@ -52,10 +52,16 @@ function formatDate(dateStr: string | undefined) {
                             class="cursor-pointer hover:bg-muted px-2 py-1 rounded border border-transparent hover:border-gray-200">
                             <div class="flex flex-row justify-between items-center">
                                 <div class="text-sm font-semibold">{{ formatDate(work.scheduled_for) }}</div>
-                                <p class="text-sm mt-2">Heure : {{ work.start_time }} → {{ work.end_time
-                                }}</p>
+                                <div class="flex flex-col mt-2">
+                                    <p class="text-sm ">Heure : {{ work.start_time }} → {{ work.end_time
+                                    }}</p>
+                                    <p class="text-sm">
+                                        Total amount : {{ work.price }} $
+                                    </p>
+                                </div>
                             </div>
-                            <div class="text-xs text-muted-foreground">{{ work.reservation?.notes }}</div>
+                            <div class=" text-xs text-muted-foreground">{{ work.reservation?.notes }}
+                            </div>
                             <Separator class="my-2" />
                         </div>
                     </div>
@@ -84,19 +90,22 @@ function formatDate(dateStr: string | undefined) {
                                     </span>
                                 </p>
                             </div>
-                            <div class="flex flex-row md:flex-col md:items-center md:justify-between gap-2">
-                                <Link :href="route('reservations.index')">
-                                <Button variant="default">Valide</Button>
+                            <div class="flex flex-col  items-center justify-between gap-2">
+                                <Link :href="route('reservations.index')" class="flex-1">
+                                <Button class="w-32 bg-green-500 dark:bg-green-300">Ajuster l'heure</Button>
                                 </Link>
-                                <Link :href="route('reservations.index')">
-                                <Button variant="destructive">Annule</Button>
+                                <Link :href="route('reservations.index')" class="flex-1">
+                                <Button variant="default" class="w-32">Valider</Button>
                                 </Link>
-                                <Link :href="route('reservations.index')">
-                                <Button variant="outline">Notes </Button>
+                                <Link :href="route('reservations.index')" class="flex-1">
+                                <Button variant="destructive" class="w-32">Annuler</Button>
+                                </Link>
+                                <Link :href="route('reservations.index')" class="flex-1">
+                                <Button variant="outline" class="w-32">Noter</Button>
                                 </Link>
                             </div>
+
                         </div>
-                        <Separator class="my-4" />
                         <!-- Fiche Babysitter si dispo -->
                         <div v-if="selectedWork.reservation?.babysitter">
                             <Separator class="my-4" />
