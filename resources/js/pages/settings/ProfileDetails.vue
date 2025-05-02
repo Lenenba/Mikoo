@@ -13,6 +13,14 @@ import { type SharedData, type Profile } from '@/types'
 import { LoaderCircle, SaveIcon } from 'lucide-vue-next'
 const page = usePage<SharedData>()
 const profile = computed(() => page.props.profile as Profile)
+const role = computed(() => page.props.role as string)
+import {
+    NumberField,
+    NumberFieldContent,
+    NumberFieldDecrement,
+    NumberFieldIncrement,
+    NumberFieldInput,
+} from '@/components/ui/number-field'
 
 const breadcrumbs = [
     { title: 'Profile Details', href: '/settings/profile/details' },
@@ -26,6 +34,7 @@ const form = useForm({
     birthdate: profile.value.birthdate ?? '',
     bio: profile.value.bio ?? '',
     experience: profile.value.experience ?? '',
+    price_per_hour: profile.value.price_per_hour ?? '',
 })
 
 function submit() {
@@ -77,15 +86,31 @@ function submit() {
                             <InputError :message="form.errors.address" class="mt-1" />
                         </div>
 
+                        <div v-if="role === 'Babysitter'" class="sm:col-span-2">
+                            <NumberField class="gap-2" :min="0" :format-options="{
+                                style: 'currency',
+                                currency: 'EUR',
+                                currencyDisplay: 'code',
+                                currencySign: 'accounting',
+                            }" v-model:model-value="form.price_per_hour">
+                                <Label for="price_per_hour">Price per hour</Label>
+                                <NumberFieldContent>
+                                    <NumberFieldDecrement />
+                                    <NumberFieldInput v-model="form.price_per_hour" />
+                                    <NumberFieldIncrement />
+                                </NumberFieldContent>
+                            </NumberField>
+                        </div>
+
                         <!-- experience full width -->
-                        <div class="sm:col-span-2">
+                        <div v-if="role === 'Babysitter'" class="sm:col-span-2">
                             <Label for="experience">experience</Label>
                             <Textarea id="experience" rows="3" v-model="form.experience" class="mt-1 w-full" />
                             <InputError :message="form.errors.experience" class="mt-1" />
                         </div>
 
                         <!-- Bio full width -->
-                        <div class="sm:col-span-2">
+                        <div v-if="role === 'Babysitter'" class="sm:col-span-2">
                             <Label for="bio">Bio</Label>
                             <Textarea id="bio" rows="4" v-model="form.bio" class="mt-1 w-full" />
                             <InputError :message="form.errors.bio" class="mt-1" />

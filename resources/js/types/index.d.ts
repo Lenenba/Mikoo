@@ -51,6 +51,7 @@ export interface Profile {
     bio?: string;
     birthdate: string;
     experience: string;
+    price_per_hour: number;
     certifications: string[]; // Assuming certifications are strings
     user_id: User['id'];
     photos: Photo[];

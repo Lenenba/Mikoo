@@ -35,6 +35,7 @@ class BabysitterProfileController extends Controller
     {
         return Inertia::render('settings/ProfileDetails', [
             'profile' => Auth::user()->profile,
+            'role'  => Auth::user()->role->name,
         ]);
     }
 
@@ -45,7 +46,6 @@ class BabysitterProfileController extends Controller
      */
     public function update(BabysitterProfileRequest $request)
     {
-
         // Validate & get only the filled data
         $data = $request->validated();
 
