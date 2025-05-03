@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type SharedData } from '@/types';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { usePage, Head } from '@inertiajs/vue3';
 import { type BreadcrumbItem } from '@/types';
 import { usePhotoUrl } from '@/composables/usePhotoUrl';
@@ -46,8 +46,19 @@ const form = useForm({
     days_of_week: [],
     notes: '',
     recurrence_freq: 'daily',
-    is_recurring: false,
+    recurence_type: 'on-time',
+    is_recurring: false as boolean,
 });
+
+// Watch the string field and update the boolean accordingly
+watch(
+    () => form.recurence_type,
+    (newType: string) => {
+        form.is_recurring = newType === 'recurent';
+
+    },
+    { immediate: true }
+);
 
 const createReservation = () => {
     form.post(route('reservations.store'), {
@@ -57,9 +68,6 @@ const createReservation = () => {
     });
 };
 
-function onToggle(value: boolean) {
-    form.is_recurring = value;
-}
 // FullCalendar options
 const calendarOptions = ref({
     aspectRatio: 2.3,
@@ -115,18 +123,22 @@ const calendarOptions = ref({
 
                     <form @submit.prevent="createReservation" class="space-y-6">
                         <div class="flex flex-col gap-4 items-center justify-between rounded-lg border p-4">
-                            <div class="flex flex-row items-center justify-between w-full">
-                                <div class="space-y-0.5">
-                                    <h2 class="text-base">
-                                        Is recurring reservation?
-                                    </h2>
-                                    <p key="description" class="text-sm text-gray-500">
-                                        If you want to create a recurring reservation, please select the option below.
-                                    </p>
-                                </div>
-                                <Switch v-model="form.is_recurring" @update:model-value="onToggle" />
-                            </div>
+                            <p key="description" class="text-sm text-gray-500">
+                                Choisi le type de reservation que tu voudrais une recurrente ou une pontuelle.
+                            </p>
                             <div class="grid gap-2 w-full">
+                                <ToggleGroup type="single" class="w-full" v-model="form.recurence_type"
+                                    variant="outline">
+                                    <ToggleGroupItem value="recurent" aria-label="Toggle bold">
+                                        Recurent
+                                    </ToggleGroupItem>
+                                    <ToggleGroupItem value="on-time" aria-label="Toggle italic">
+                                        One time
+                                    </ToggleGroupItem>
+                                </ToggleGroup>
+                            </div>
+                            <div class="grid gap-2 w-full" v-if="form.is_recurring">
+                                <Label for="name">Recurrence interval</Label>
                                 <ToggleGroup type="single" class="w-full" v-model="form.recurrence_freq"
                                     variant="outline">
                                     <ToggleGroupItem value="daily" aria-label="Toggle bold">
@@ -140,7 +152,8 @@ const calendarOptions = ref({
                                     </ToggleGroupItem>
                                 </ToggleGroup>
                             </div>
-                            <div class="grid gap-2 w-full">
+                            <div class="grid gap-2 w-full" v-if="form.is_recurring">
+                                <Label for="name">Pour quelle jours de la semaine </Label>
                                 <ToggleGroup type="multiple" class="w-full" v-model="form.days_of_week"
                                     variant="outline">
                                     <ToggleGroupItem aria-label="Toggle bold"
@@ -158,9 +171,9 @@ const calendarOptions = ref({
                                     required placeholder="Start date" />
                                 <InputError class="mt-2" :message="form.errors.recurrence_start_date" />
                             </div>
-                            <div class="grid gap-2 w-full">
+                            <div class="grid gap-2 w-full" v-if="form.is_recurring">
                                 <Label for="name">End date</Label>
-                                <Input type="date" class="mt-1 block w-full" v-model="form.recurrence_end_date" required
+                                <Input type="date" class="mt-1 block w-full" v-model="form.recurrence_end_date"
                                     placeholder="End date" />
                                 <InputError class="mt-2" :message="form.errors.recurrence_end_date" />
                             </div>
@@ -181,8 +194,7 @@ const calendarOptions = ref({
                         </div>
                         <div class="grid gap-2 w-full">
                             <Label for="name">Notes</Label>
-                            <Textarea type="text" class="mt-1 block w-full" v-model="form.notes" required
-                                placeholder="Notes" />
+                            <Textarea type="text" class="mt-1 block w-full" v-model="form.notes" placeholder="Notes" />
                             <InputError class="mt-2" :message="form.errors.notes" />
                         </div>
                         <div class="flex flex-row items-center justify-between ">

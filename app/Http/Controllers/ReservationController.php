@@ -78,45 +78,55 @@ class ReservationController extends Controller
     {
         $data = $request->validated();
 
-        // 1️⃣ Build the RRULE string
-        $rruleString = $this->buildRRule(
-            $data['recurrence_freq'],
-            $data['recurrence_interval'] ?? 1,
-            $data['recurrence_start_date'],
-            $data['recurrence_end_date'],
-            $data['days_of_week'] ?? []
-        );
+        if ($data['is_recurring']) {
 
+            // 1️⃣ Build the RRULE string
+            $rruleString = $this->buildRRule(
+                $data['recurrence_freq'],
+                $data['recurrence_interval'] ?? 1,
+                $data['recurrence_start_date'],
+                $data['recurrence_end_date'],
+                $data['days_of_week'] ?? []
+            );
+            // 2️⃣ Instancier l'objet RRule pour la nouvelle réservation
+            $newRule = new RRule($rruleString);
 
-        // 2️⃣ Instancier l'objet RRule pour la nouvelle réservation
-        $newRule = new RRule($rruleString);
+            // 3️⃣ Récupérer les réservations actives du user/babysitter
+            $existingReservations = Reservation::where('user_id', Auth::id())
+                ->where('babysitter_id', $data['babysitter_id'])
+                ->where('status', '!=', 'canceled')
+                ->whereNotNull('recurrence_rule')
+                ->get(['recurrence_rule']);
 
-        // 3️⃣ Récupérer les réservations actives du user/babysitter
-        $existingReservations = Reservation::where('user_id', Auth::id())
-            ->where('babysitter_id', $data['babysitter_id'])
-            ->where('status', '!=', 'canceled')
-            ->whereNotNull('recurrence_rule')
-            ->get(['recurrence_rule']);
+            // 4️⃣ Vérifier chaque occurrence de la nouvelle règle
+            foreach ($newRule as $occurrence) {
+                /** @var \DateTimeInterface $occurrence */
+                foreach ($existingReservations as $res) {
+                    $existingRule = new RRule($res->recurrence_rule);
 
-        // 4️⃣ Vérifier chaque occurrence de la nouvelle règle
-        foreach ($newRule as $occurrence) {
-            /** @var \DateTimeInterface $occurrence */
-            foreach ($existingReservations as $res) {
-                $existingRule = new RRule($res->recurrence_rule);
-
-                // Si une occurrence existe déjà pour le même jour
-                if ($this->occursOnSameDay($existingRule, $occurrence)) {
-                    return back()
-                        ->with('error', __('Vous avez déjà une réservation active ce jour-là.'));
+                    // Si une occurrence existe déjà pour le même jour
+                    if ($this->occursOnSameDay($existingRule, $occurrence)) {
+                        return back()
+                            ->with('error', __('Vous avez déjà une réservation active ce jour-là.'));
+                    }
                 }
             }
+
+            $data['recurrence_rule'] = $rruleString;
+        } else {
+            $data['recurrence_end_date'] = Carbon::parse($data['recurrence_start_date'])
+                ->utc()->format('Ymd');
+            $data['recurrence_start_date'] = Carbon::parse($data['recurrence_start_date'])
+                ->utc()->format('Ymd');
+            $data['recurrence_rule']     = null;
         }
+
+
 
 
         // 5️⃣ Création de la réservation
         $reservation = Reservation::create(array_merge($data, [
             'user_id'         => Auth::id(),
-            'recurrence_rule' => $rruleString,
         ]));
 
         $reservation->start_time = Carbon::createFromFormat('H:i', $data['start_time']);

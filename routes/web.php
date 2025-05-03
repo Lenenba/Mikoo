@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WorkController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\SearchBabysitterController;
@@ -9,7 +11,6 @@ use App\Http\Controllers\AcceptReservationController;
 use App\Http\Controllers\BabysitterProfileController;
 use App\Http\Controllers\CancelReservationController;
 use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\WelcomeController;
 
 Route::get('/', WelcomeController::class)
     ->name('home');
@@ -47,6 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('works.index');
     Route::put('/works/{workId}/update', [WorkController::class, 'update'])
         ->name('works.update');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])
+        ->name('invoices.index');
 });
 
 require __DIR__ . '/settings.php';
