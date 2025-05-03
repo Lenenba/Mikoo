@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Reservation;
 
-class ReservationRequest extends \Illuminate\Foundation\Http\FormRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class ReservationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,47 +19,33 @@ class ReservationRequest extends \Illuminate\Foundation\Http\FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * If is_recurring is false, recurrence fields are not validated at all.
+     *
      * @return array<string, mixed>
      */
     public function rules(): array
     {
-
-        return [
-            // Basic reservation data
-            'start_time'             => ['required', 'date_format:H:i'],
-            'end_time'               => ['required', 'date_format:H:i', 'after:start_time'],
-            'babysitter_id'          => ['required', 'exists:users,id'],
-            'notes'                  => ['nullable', 'string'],
-
-            // Toggle for recurrence
-            'is_recurring'           => ['required', 'boolean'],
-            // Only required when is_recurring = true
-            'recurrence_end_date'    => [
-                'date',
-            ],
-            // Always required: the date of the (first) reservation
-            'recurrence_start_date'  => ['required', 'date'],
-            // Optional: the end date of the recurrence
-            'recurrence_freq'        => [
-                'required_if:is_recurring,1',
-                'in:daily,weekly,monthly',
-                'after_or_equal:recurrence_start_date',
-            ],
-            'recurrence_interval'    => [
-                'required_if:is_recurring,1',
-                'integer',
-                'min:1',
-            ],
-            'days_of_week'           => [
-                'required_if:is_recurring,1',
-                'array',
-            ],
-            // Validate each selected day
-            'days_of_week.*'         => [
-                'required_if:is_recurring,1',
-                'in:MO,TU,WE,TH,FR,SA,SU',
-            ],
-
+        // Base rules always applied
+        $rules = [
+            'start_time'      => ['required', 'date_format:H:i'],
+            'end_time'        => ['required', 'date_format:H:i', 'after:start_time'],
+            'babysitter_id'   => ['required', 'exists:users,id'],
+            'notes'           => ['nullable', 'string'],
+            'is_recurring'    => ['required', 'boolean'],
+            'recurrence_start_date' => ['required', 'date'],
         ];
+
+        // Only add recurrence rules if the reservation is recurring
+        if ($this->boolean('is_recurring')) {
+            $rules = array_merge($rules, [
+                'recurrence_end_date'   => ['required', 'date', 'after_or_equal:recurrence_start_date'],
+                'recurrence_freq'       => ['required', 'in:daily,weekly,monthly'],
+                'recurrence_interval'   => ['required', 'integer', 'min:1'],
+                'days_of_week'          => ['required', 'array'],
+                'days_of_week.*'        => ['in:MO,TU,WE,TH,FR,SA,SU'],
+            ]);
+        }
+
+        return $rules;
     }
 }

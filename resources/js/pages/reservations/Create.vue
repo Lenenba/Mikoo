@@ -61,6 +61,10 @@ watch(
 );
 
 const createReservation = () => {
+    if (!form.is_recurring) {
+        form.recurrence_end_date = form.recurrence_start_date;
+        form.days_of_week = [];
+    }
     form.post(route('reservations.store'), {
         onSuccess: () => {
             form.reset();
