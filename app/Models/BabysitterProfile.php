@@ -21,6 +21,7 @@ class BabysitterProfile extends Model
         'bio',
         'experience',
         'price_per_hour',
+        'payment_frequency',
     ];
 
     public function user()

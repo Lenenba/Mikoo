@@ -1,3 +1,4 @@
+<!-- components/FormSelect.vue -->
 <script setup lang="ts">
 import {
     Select,
@@ -8,25 +9,38 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { type PropType } from 'vue'
 
-defineProps<{
-    Items: {
-        value: string
-        label: string
-    }[]
-    Label: string
-}>();
+interface Option {
+    value: string | number
+    label: string
+}
+
+const props = defineProps({
+    label: { type: String, required: true },
+    items: { type: Array as PropType<Option[]>, required: true },
+    modelValue: { type: [String, Number] as PropType<string | number>, required: false },
+})
+
+const emit = defineEmits<{
+    (e: 'update:modelValue', value: string | number): void
+}>()
+
+/** Handle selection change */
+function onSelect(value: string | number) {
+    emit('update:modelValue', value)
+}
 </script>
 
 <template>
-    <Select class="w-full" :defaultValue="Items[0].value">
+    <Select class="w-full gap-2" :value="modelValue" @value-change="onSelect">
         <SelectTrigger>
-            <SelectValue placeholder="Select item" />
+            <SelectValue placeholder="Please select…" />
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
-                <SelectLabel>{{ Label }}</SelectLabel>
-                <SelectItem v-for="item in Items" :key="item.value" :value="item.value">
+                <SelectLabel>{{ label }}</SelectLabel>
+                <SelectItem v-for="item in items" :key="item.value" :value="item.value">
                     {{ item.label }}
                 </SelectItem>
             </SelectGroup>

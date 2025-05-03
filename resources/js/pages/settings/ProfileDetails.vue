@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import InputError from '@/components/InputError.vue'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { type SharedData, type Profile } from '@/types'
 import { LoaderCircle, SaveIcon } from 'lucide-vue-next'
 const page = usePage<SharedData>()
@@ -35,6 +36,7 @@ const form = useForm({
     bio: profile.value.bio ?? '',
     experience: profile.value.experience ?? '',
     price_per_hour: profile.value.price_per_hour ?? '',
+    payment_frequency: profile.value.payment_frequency ?? '',
 })
 
 function submit() {
@@ -49,7 +51,27 @@ function submit() {
         <SettingsLayout>
             <div class="max-w-3xl mx-auto p-6 ">
                 <HeadingSmall title="Profile Information" description="Update your personal details" />
-                <Form @submit.prevent="submit" class="mt-6">
+                <form @submit.prevent="submit" class="mt-6">
+                    <div v-if="role === 'Babysitter'" class="my-8 w-full">
+                        <Label for="first_name" class="mb-2">Payment frequencies</Label>
+                        <ToggleGroup type="single" class="w-full" v-model="form.payment_frequency" variant="outline">
+                            <ToggleGroupItem value="per_task" aria-label="Toggle bold">
+                                <Calendar1 class="h-4 w-4" /> Per task
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="daily" aria-label="Toggle italic">
+                                <Clock class="h-4 w-4" /> Daily
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="weekly" aria-label="Toggle italic">
+                                <CalendarDays class="h-4 w-4" /> Weekly
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="biweekly" aria-label="Toggle strikethrough">
+                                <CalendarCheck class="h-4 w-4" /> Biweekly
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="monthly" aria-label="Toggle underline">
+                                <CalendarSync class="h-4 w-4" /> Monthly
+                            </ToggleGroupItem>
+                        </ToggleGroup>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <!-- First Name -->
                         <div>
@@ -79,14 +101,7 @@ function submit() {
                             <InputError :message="form.errors.birthdate" class="mt-1" />
                         </div>
 
-                        <!-- Address full width -->
-                        <div class="sm:col-span-2">
-                            <Label for="address">Address</Label>
-                            <Input id="address" v-model="form.address" class="mt-1 w-full" />
-                            <InputError :message="form.errors.address" class="mt-1" />
-                        </div>
-
-                        <div v-if="role === 'Babysitter'" class="sm:col-span-2">
+                        <div v-if="role === 'Babysitter'">
                             <NumberField class="gap-2" :min="0" :format-options="{
                                 style: 'currency',
                                 currency: 'EUR',
@@ -100,6 +115,14 @@ function submit() {
                                     <NumberFieldIncrement />
                                 </NumberFieldContent>
                             </NumberField>
+                        </div>
+
+
+                        <!-- Address full width -->
+                        <div class="sm:col-span-2">
+                            <Label for="address">Address</Label>
+                            <Input id="address" v-model="form.address" class="mt-1 w-full" />
+                            <InputError :message="form.errors.address" class="mt-1" />
                         </div>
 
                         <!-- experience full width -->
@@ -124,7 +147,7 @@ function submit() {
                         </Button>
                         <Button type="button" variant="outline" class="w-full" @click="form.reset()">Reset</Button>
                     </div>
-                </Form>
+                </form>
             </div>
         </SettingsLayout>
     </AppLayout>

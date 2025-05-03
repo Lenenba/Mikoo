@@ -53,7 +53,6 @@ class BabysitterProfileController extends Controller
         $user = Auth::user();
         // Get the user's profile
         $profile = $user->profile;
-
         // Attempt to update: update() ne lancera le save() que s’il y a des attributs modifiés
         $updated = $profile->update($data);
 

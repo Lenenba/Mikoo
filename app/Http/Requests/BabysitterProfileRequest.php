@@ -27,6 +27,7 @@ class BabysitterProfileRequest extends FormRequest
         // Si l'utilisateur courant est babysitter, alors price_per_hour est obligatoire
         if (Auth::user()->role->name === env('BABYSITTER_ROLE')) {
             $base['price_per_hour'] = ['required', 'integer', 'min:5'];
+            $base['payment_frequency'] = ['required', 'string', 'in:per_task,daily,weekly,biweekly,monthly'];
         }
 
         return $base;

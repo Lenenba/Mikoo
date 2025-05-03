@@ -55,6 +55,7 @@ export interface Profile {
     certifications: string[]; // Assuming certifications are strings
     user_id: User['id'];
     photos: Photo[];
+    payment_frequency: string;
 }
 
 export interface Availability {

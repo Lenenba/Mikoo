@@ -24,6 +24,8 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->text('experience')->nullable();
             $table->integer('price_per_hour')->default(0);
+            $table->enum('payment_frequency', ['per_task', 'daily', 'weekly', 'biweekly', 'monthly'])
+                ->default('per_task');
             $table->timestamps();
         });
 

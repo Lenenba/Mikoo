@@ -19,6 +19,7 @@ class Work extends Model
         'is_completed',
         'is_approved_by_parent',
         'invoiced_at',
+        'price',
     ];
 
     protected $casts = [

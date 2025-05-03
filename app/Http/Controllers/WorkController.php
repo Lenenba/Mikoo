@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reservation;
 use App\Models\Work;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use App\Services\InvoiceService;
 use Illuminate\Support\Facades\Auth;
 
 class WorkController extends Controller
@@ -63,6 +64,12 @@ class WorkController extends Controller
         // }
 
 
+        if (
+            $work->status === 'finished'
+            && $work->reservation->babysitter->profile->payment_frequency === 'per_task'
+        ) {
+            InvoiceService::createPerTaskInvoice($work);
+        }
         // Update the work with the new data
         $work->update($request->all());
 
