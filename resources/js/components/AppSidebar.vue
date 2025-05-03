@@ -5,8 +5,9 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Calendar, BriefcaseBusiness, LayoutGrid, Baby, FileText } from 'lucide-vue-next';
+import { Calendar, BriefcaseBusiness, LayoutGrid, Baby, fileTe } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import AppLogoIcon2 from './AppLogoIcon2.vue';
 
 const mainNavItems: NavItem[] = [
     {
@@ -31,8 +32,8 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Mes Factures',
-        href: '/invoices',
-        icon: FileText,
+        href: '/works',
+        icon: BriefcaseBusiness,
     },
 ];
 
@@ -40,18 +41,12 @@ const mainNavItems: NavItem[] = [
 
 <template>
     <Sidebar collapsible="icon" variant="inset">
-        <SidebarHeader>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton size="lg" as-child>
-                        <Link :href="route('dashboard')">
-                        <AppLogo />
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
+        <SidebarHeader class="py-6">
+            <Link :href="route('dashboard')" class="flex items-center justify-center">
+            <!-- Adjust h-12 (3rem) or h-16 (4rem) as you like -->
+            <AppLogoIcon2 class="h-16 w-auto" />
+            </Link>
         </SidebarHeader>
-
         <SidebarContent>
             <NavMain :items="mainNavItems" />
         </SidebarContent>
