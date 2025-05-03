@@ -10,6 +10,7 @@ use App\Models\Work;
 use App\Models\Reservation;
 use App\Models\WorkSession;
 use Illuminate\Database\Seeder;
+use App\Services\InvoiceService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Utils\Traits\ReservationTrait;
@@ -95,14 +96,18 @@ class ProductionUsersSeeder extends Seeder
             // Optional: create some sessions manually to simulate occurrence
             foreach ([0, 2, 4] as $offset) {
                 $day = $startDate->copy()->addDays($offset);
-                Work::create([
+                $work = Work::create([
                     'reservation_id' => $reservation->id,
                     'scheduled_for' => $day->toDateString(),
                     'start_time' => '09:00',
                     'end_time' => '12:00',
                     'is_completed' => true,
-                    'is_approved_by_parent' => $offset !== 2, // simulate one unapproved
+                    'is_approved_by_parent' => $offset !== 2,
+                    'price'                 => 3 * $reservation->babysitter->profile->price_per_hour,
                 ]);
+
+                // Create an invoice for this work session
+                InvoiceService::createPerTaskInvoice($work);
             }
         }
     }

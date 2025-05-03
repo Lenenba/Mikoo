@@ -14,14 +14,14 @@ class InvoiceService
             'babysitter_id' => $work->reservation->babysitter_id,
             'period_start'  => $work->scheduled_for,
             'period_end'    => $work->scheduled_for,
-            'total_amount'  => $work->amount,
+            'total_amount'  => $work->price,
         ]);
         $invoice->items()->create([
             'work_id'     => $work->id,
             'description' => "Garde le {$work->scheduled_for}",
-            'hours'       => $work->hours,
+            'hours'       => (new \DateTime($work->end_time))->diff(new \DateTime($work->start_time))->h,
             'unit_price'  => $work->reservation->babysitter->profile->price_per_hour,
-            'amount'      => $work->amount,
+            'amount'      => $work->price,
         ]);
         // envoi d’email ou notification
     }
@@ -54,9 +54,9 @@ class InvoiceService
                 $invoice->items()->create([
                     'work_id'     => $work->id,
                     'description' => "Garde le {$work->scheduled_for}",
-                    'hours'       => $work->hours,
+                    'hours'       => (new \DateTime($work->end_time))->diff(new \DateTime($work->start_time))->h,
                     'unit_price'  => $profile->price_per_hour,
-                    'amount'      => $work->amount,
+                    'amount'      => $work->price,
                 ]);
             }
             // notifier la nounou

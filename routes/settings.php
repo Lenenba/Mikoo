@@ -7,6 +7,7 @@ use App\Http\Controllers\BabysitterProfileController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\BabysitterProfilePhotoController;
+use App\Http\Controllers\DeleteProfilePhotoController;
 use App\Http\Controllers\SetDefaultProfilePhotoController;
 
 Route::middleware('auth')->group(function () {
@@ -27,6 +28,9 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/settings/photos/default/{photoId}', SetDefaultProfilePhotoController::class)
         ->name('photos.setDefault');
+    Route::delete('/settings/photos/delete/{photoId}', DeleteProfilePhotoController::class)
+        ->name('photos.destroy');
+
     Route::get('settings/profile/details', [BabysitterProfileController::class, 'edit'])
         ->name('babysitter.profile.details.edit');
     Route::post('settings/profile/details', [BabysitterProfileController::class, 'update'])
