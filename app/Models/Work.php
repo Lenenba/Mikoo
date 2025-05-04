@@ -40,6 +40,14 @@ class Work extends Model
     }
 
     /**
+     * Get the reviews associated with the work.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
      * scope for parent user.
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $userId

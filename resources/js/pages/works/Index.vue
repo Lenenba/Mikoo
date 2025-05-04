@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/vue3';
 import type { Work } from '@/types/work';
+import NoteForm from './components/NoteForm.vue';
 import { usePhotoUrl } from '@/composables/usePhotoUrl';
 import {
     Dialog,
@@ -32,7 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 const page = usePage();
 const works = computed<Work[]>(() => page.props.works);
 const selectedWork = ref<Work | null>(null);
-
+const role = computed(() => page.props.auth.role);
 onMounted(() => {
     if (works.value.length > 0) {
         selectedWork.value = works.value[0];
@@ -152,14 +153,9 @@ const submit = () => {
                                         </form>
                                     </DialogContent>
                                 </Dialog>
-                                <Link :href="route('reservations.index')" class="flex-1">
-                                <Button variant="default" class="w-32">Valider</Button>
-                                </Link>
+                                <NoteForm :work="selectedWork" v-if="role !== 'Babysitter'" />
                                 <Link :href="route('reservations.index')" class="flex-1">
                                 <Button variant="destructive" class="w-32">Annuler</Button>
-                                </Link>
-                                <Link :href="route('reservations.index')" class="flex-1">
-                                <Button variant="outline" class="w-32">Noter</Button>
                                 </Link>
                             </div>
 

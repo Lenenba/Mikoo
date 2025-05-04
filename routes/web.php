@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WorkController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ReservationController;
@@ -51,6 +52,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/invoices', [InvoiceController::class, 'index'])
         ->name('invoices.index');
+
+    Route::post('/works/{work}/reviews', [ReviewController::class, 'store'])
+        ->name('reviews.store')
+        ->middleware('auth');
 });
 
 require __DIR__ . '/settings.php';
