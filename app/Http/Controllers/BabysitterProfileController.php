@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Reservation;
+use App\Services\ReviewService;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BabysitterProfileRequest;
+use Illuminate\Support\Collection;
 
 class BabysitterProfileController extends Controller
 {
@@ -15,14 +18,38 @@ class BabysitterProfileController extends Controller
      * @param  \App\Models\User  $user
      * @return \Inertia\Response
      */
-    public function show(User $user)
+    public function show(User $user, ReviewService $reviewService)
     {
-        $babySitter = User::where('id', $user->id)
-            ->with(['profile', 'profile.photos', 'profile.certifications'])
+        $babysitter = $user->load([
+            'profile',
+            'profile.photos',
+            'profile.certifications',
+        ]);
+        $reservations = Reservation::where('babysitter_id', $user->id)
+            ->with(['works', 'works.reviews', 'works.reviews.photos'])
             ->get();
 
+        // Flatten all reviews from reservations -> works -> reviews
+        /** @var Collection $reviews */
+        $reviews = $reservations
+            ->flatMap->works
+            ->flatMap->reviews;
+
+        // Calculate metrics using ReviewService
+        $sorted      = $reviewService->sortReviews($reviews, 'newest');
+        $average     = $reviewService->averageRating($reviews);
+        $total       = $reviewService->totalReviews($reviews);
+        $counts      = $reviewService->starCounts($reviews);
+        $percentages = $reviewService->starPercentages($reviews);
+
+        // Render Inertia page with the prepared data
         return Inertia::render('babysitter/Index', [
-            'babySitter' => $babySitter,
+            'babysitter'      => $babysitter,
+            'reviews'         => $sorted,
+            'averageRating'   => $average,
+            'totalReviews'    => $total,
+            'starCounts'      => $counts,
+            'starPercentages' => $percentages,
         ]);
     }
 

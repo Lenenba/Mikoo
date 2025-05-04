@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import SetDefaultPictureForm from '../pages/settings/components/defaultPictureForm.vue'
 import DelectPictureForm from '../pages/settings/components/deletePictureForm.vue'
